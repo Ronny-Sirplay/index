@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Informe Desk Centralizado — 27 Mar 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #C5281C;
+    --red-light: #FDF0EF;
+    --red-mid: #F5C4C1;
+    --amber: #B45309;
+    --amber-light: #FFFBEB;
+    --amber-mid: #FDE68A;
+    --green: #166534;
+    --green-light: #F0FDF4;
+    --green-mid: #BBF7D0;
+    --blue: #1E40AF;
+    --blue-light: #EFF6FF;
+    --blue-mid: #BFDBFE;
+    --gray: #374151;
+    --gray-light: #F9FAFB;
+    --gray-mid: #E5E7EB;
+    --ink: #111827;
+    --ink-2: #374151;
+    --ink-3: #6B7280;
+    --ink-4: #9CA3AF;
+    --white: #FFFFFF;
+    --border: #E5E7EB;
+    --page-bg: #F8F7F4;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Instrument Sans', sans-serif;
+    background: var(--page-bg);
+    color: var(--ink);
+    font-size: 14px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* HEADER */
+  .page-header {
+    background: var(--ink);
+    color: var(--white);
+    padding: 48px 64px 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  .page-header::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 280px; height: 280px;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 50%;
+  }
+  .page-header::after {
+    content: '';
+    position: absolute;
+    top: -20px; right: -20px;
+    width: 160px; height: 160px;
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 50%;
+  }
+  .header-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.45);
+    margin-bottom: 12px;
+  }
+  .header-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 38px;
+    line-height: 1.15;
+    font-weight: 400;
+    margin-bottom: 12px;
+    max-width: 680px;
+  }
+  .header-sub {
+    font-size: 14px;
+    color: rgba(255,255,255,0.55);
+    max-width: 600px;
+    line-height: 1.6;
+  }
+  .header-meta {
+    display: flex;
+    gap: 32px;
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+  }
+  .meta-item { display: flex; flex-direction: column; gap: 3px; }
+  .meta-label { font-size: 10px; text-transform: uppercase; letter-spacing: .1em; color: rgba(255,255,255,0.35); font-family: 'DM Mono', monospace; }
+  .meta-value { font-size: 20px; font-weight: 600; color: var(--white); }
+  .meta-value.danger { color: #FCA5A5; }
+  .meta-value.warn { color: #FDE68A; }
+  .meta-value.ok { color: #86EFAC; }
+  .meta-value.info { color: #93C5FD; }
+
+  /* LAYOUT */
+  .page-body { max-width: 960px; margin: 0 auto; padding: 48px 32px 80px; }
+
+  /* SECTION HEADERS */
+  .section-block { margin-bottom: 40px; }
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--ink-4);
+    margin-bottom: 6px;
+  }
+  .section-heading {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    font-weight: 400;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+  .section-desc { font-size: 13px; color: var(--ink-3); margin-bottom: 20px; line-height: 1.5; }
+
+  hr.divider { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
+
+  /* STAT GRID */
+  .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 32px; }
+  .stat-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 20px;
+  }
+  .stat-num { font-size: 32px; font-weight: 600; line-height: 1; margin-bottom: 6px; }
+  .stat-label { font-size: 12px; color: var(--ink-3); line-height: 1.4; }
+  .stat-card.red .stat-num { color: var(--red); }
+  .stat-card.amber .stat-num { color: var(--amber); }
+  .stat-card.green .stat-num { color: var(--green); }
+  .stat-card.blue .stat-num { color: var(--blue); }
+  .stat-card.red { border-left: 3px solid var(--red); }
+  .stat-card.amber { border-left: 3px solid #D97706; }
+  .stat-card.green { border-left: 3px solid #16A34A; }
+  .stat-card.blue { border-left: 3px solid #2563EB; }
+
+  /* PROGRESS BAR */
+  .progress-section { background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 20px 24px; margin-bottom: 24px; }
+  .progress-title { font-size: 13px; font-weight: 600; margin-bottom: 12px; color: var(--ink); }
+  .progress-bar { height: 10px; background: var(--gray-mid); border-radius: 5px; overflow: hidden; display: flex; }
+  .progress-seg { height: 100%; }
+  .progress-legend { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 10px; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--ink-3); }
+  .legend-dot { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+
+  /* ALERT BLOCKS */
+  .alert {
+    border-radius: 10px;
+    padding: 18px 22px;
+    margin-bottom: 20px;
+    border-left: 4px solid;
+  }
+  .alert h4 { font-size: 14px; font-weight: 600; margin-bottom: 6px; }
+  .alert p { font-size: 13px; line-height: 1.55; }
+  .alert ul { margin: 8px 0 0 18px; }
+  .alert ul li { font-size: 13px; line-height: 1.55; margin-bottom: 4px; }
+  .alert.red { background: var(--red-light); border-color: var(--red); }
+  .alert.red h4 { color: var(--red); }
+  .alert.amber { background: var(--amber-light); border-color: #D97706; }
+  .alert.amber h4 { color: var(--amber); }
+  .alert.green { background: var(--green-light); border-color: #16A34A; }
+  .alert.green h4 { color: var(--green); }
+
+  /* TASK TABLE */
+  .task-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 24px; }
+  .task-table thead th {
+    text-align: left;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    color: var(--ink-4);
+    padding: 10px 14px;
+    background: var(--gray-light);
+    border-bottom: 1px solid var(--border);
+    font-weight: 500;
+  }
+  .task-table thead th:first-child { border-radius: 8px 0 0 0; }
+  .task-table thead th:last-child { border-radius: 0 8px 0 0; }
+  .task-table tbody tr { border-bottom: 1px solid var(--border); }
+  .task-table tbody tr:last-child { border-bottom: none; }
+  .task-table tbody tr:hover { background: #FAFAFA; }
+  .task-table td { padding: 10px 14px; vertical-align: top; }
+  .task-table-wrap { background: var(--white); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 24px; }
+  .table-header { padding: 14px 16px 12px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
+  .table-header h3 { font-size: 14px; font-weight: 600; color: var(--ink); flex: 1; }
+  .badge {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 2px 9px;
+    border-radius: 999px;
+  }
+  .badge.red { background: var(--red-light); color: var(--red); }
+  .badge.amber { background: var(--amber-light); color: var(--amber); }
+  .badge.green { background: var(--green-light); color: var(--green); }
+  .badge.blue { background: var(--blue-light); color: var(--blue); }
+  .badge.gray { background: var(--gray-light); color: var(--ink-3); }
+  .task-id { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--ink-3); white-space: nowrap; }
+  .task-title { color: var(--ink); font-weight: 500; line-height: 1.4; }
+  .task-note { color: var(--ink-3); font-size: 12px; margin-top: 2px; line-height: 1.4; }
+  .cnt { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--ink-3); }
+
+  /* CTA SECTION */
+  .cta-block {
+    background: var(--ink);
+    color: var(--white);
+    border-radius: 12px;
+    padding: 32px 36px;
+    margin-top: 8px;
+  }
+  .cta-block h3 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 20px;
+    font-weight: 400;
+    margin-bottom: 10px;
+    color: #FCA5A5;
+  }
+  .cta-block p { font-size: 13px; color: rgba(255,255,255,0.7); line-height: 1.6; margin-bottom: 16px; }
+  .cta-block ul { margin-left: 18px; }
+  .cta-block ul li { font-size: 13px; color: rgba(255,255,255,0.75); line-height: 1.6; margin-bottom: 8px; padding-left: 4px; }
+  .cta-block ul li strong { color: #FDE68A; font-weight: 600; }
+  .cta-highlight {
+    display: inline-block;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 8px;
+    padding: 12px 18px;
+    margin-top: 16px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.6);
+    line-height: 1.5;
+  }
+  .cta-highlight strong { color: #93C5FD; }
+
+  /* FOOTER */
+  .page-footer {
+    text-align: center;
+    padding: 32px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-4);
+    border-top: 1px solid var(--border);
+    letter-spacing: .06em;
+    background: var(--white);
+  }
+
+  @media print {
+    body { background: white; }
+    .page-header { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+    .cta-block { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+    .task-table tbody tr:hover { background: transparent; }
+  }
+  @media (max-width: 680px) {
+    .stat-grid { grid-template-columns: repeat(2, 1fr); }
+    .page-header { padding: 32px 24px 28px; }
+    .header-title { font-size: 26px; }
+    .header-meta { flex-wrap: wrap; gap: 20px; }
+    .page-body { padding: 32px 16px 60px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<header class="page-header">
+  <div class="header-eyebrow">SIRPLAY · Desk Centralizado · Reporte de Pendientes</div>
+  <h1 class="header-title">Análisis de tickets pendientes y cierre con feedback</h1>
+  <p class="header-sub">Respuesta al planteo de Guido (07:08 hs): estado real de los tasks que figuran como pendientes en el archivo vs. su estado actualizado en el sistema, y cuántos cuentan con feedback útil para el cliente.</p>
+  <div class="header-meta">
+    <div class="meta-item">
+      <span class="meta-label">Fecha</span>
+      <span class="meta-value">27 / 03 / 2026</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Total en archivo</span>
+      <span class="meta-value info">56</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Pendientes (FALSE)</span>
+      <span class="meta-value danger">47</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Resueltos hoy</span>
+      <span class="meta-value ok">9</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Con feedback completo</span>
+      <span class="meta-value danger">0 de 47</span>
+    </div>
+  </div>
+</header>
+
+<!-- ===== BODY ===== -->
+<main class="page-body">
+
+  <!-- SECCIÓN A -->
+  <div class="section-block">
+    <div class="section-label">Sección A</div>
+    <div class="section-heading">Los 9 tasks actualizados hoy — Mea culpa</div>
+    <p class="section-desc">Estos tickets figuraban como pendientes en el archivo y fueron actualizados durante el día de hoy (27/03). Se analiza cuáles tienen un comentario que permite dar respuesta al cliente y cuáles no.</p>
+
+    <div class="stat-grid">
+      <div class="stat-card green">
+        <div class="stat-num">5</div>
+        <div class="stat-label">Con respuesta útil y accionable para el cliente</div>
+      </div>
+      <div class="stat-card amber">
+        <div class="stat-num">4</div>
+        <div class="stat-label">Cerrados o "Published" sin explicación técnica</div>
+      </div>
+      <div class="stat-card blue">
+        <div class="stat-num">9</div>
+        <div class="stat-label">Total actualizados hoy en el archivo</div>
+      </div>
+      <div class="stat-card red">
+        <div class="stat-num">44%</div>
+        <div class="stat-label">De los resueltos hoy sin feedback para el cliente</div>
+      </div>
+    </div>
+
+    <div class="alert green">
+      <h4>✔ 5 tasks resueltos hoy con comentario accionable</h4>
+      <p>Estos tasks tienen una respuesta que permite informar al cliente. Se considera en regla para el reporte de hoy.</p>
+    </div>
+
+    <div class="task-table-wrap">
+      <div class="table-header">
+        <span class="badge green">Con feedback</span>
+        <h3>Tasks con respuesta útil</h3>
+        <span class="cnt">5 tasks</span>
+      </div>
+      <table class="task-table">
+        <thead>
+          <tr>
+            <th>Task</th>
+            <th>Título</th>
+            <th>Respuesta registrada</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="task-id">JU1-T1835</span></td>
+            <td><div class="task-title">Diferencia en monto apostado y neto – Reporte GGR (#8185)</div></td>
+            <td><div class="task-note">Respondido por Giusy, vía email.</div></td>
+          </tr>
+          <tr>
+            <td><span class="task-id">CA4-T103</span></td>
+            <td><div class="task-title">Actualización integración GameURL – externalPlayerId</div></td>
+            <td><div class="task-note">Solucionado el 19/03, informado en Teams (Giusy lo confirmó).</div></td>
+          </tr>
+          <tr>
+            <td><span class="task-id">JU1-T1868</span></td>
+            <td><div class="task-title">Configuración campañas Cashback INSIGNIA y VIP – Marzo 2026 (#8393)</div></td>
+            <td><div class="task-note">Campañas publicadas el domingo 22/03. ✔ Accionable.</div></td>
+          </tr>
+          <tr>
+            <td><span class="task-id">LA2-I91</span></td>
+            <td><div class="task-title">Problema de acceso por geolocalización – elizabeth123 (#8537)</div></td>
+            <td><div class="task-note">Solucionado, el usuario se encuentra logueado (27/03).</div></td>
+          </tr>
+          <tr>
+            <td><span class="task-id">JU1-T1893</span></td>
+            <td><div class="task-title">Revisión estado "fallido" en HotWeekend – alanguzman06 (#8549)</div></td>
+            <td><div class="task-note">Se respondió al cliente sus consultas (26/03), ya no respondió.</div></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="alert amber">
+      <h4>⚠ Mea culpa: 4 tasks cerrados/Published sin explicación</h4>
+      <p>Estos tasks fueron marcados como resueltos hoy, pero el campo "Respuesta al Task" solo indica que se cerró o que está en Published, sin describir qué se hizo ni cómo se resolvió. <strong>No es posible trasladar la solución al cliente.</strong></p>
+    </div>
+
+    <div class="task-table-wrap">
+      <div class="table-header">
+        <span class="badge amber">Sin feedback útil</span>
+        <h3>Tasks cerrados sin explicación técnica</h3>
+        <span class="cnt">4 tasks</span>
+      </div>
+      <table class="task-table">
+        <thead>
+          <tr>
+            <th>Task</th>
+            <th>Título</th>
+            <th>Respuesta registrada</th>
+            <th>Problema</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="task-id">AHC0-T1694</span></td>
+            <td><div class="task-title">Duplicación Bono Hot Weekend – Locofer (#7922)</div></td>
+            <td><div class="task-note">Cerrado sin comentario; se cierra el ticket.</div></td>
+            <td><div class="task-note">No sabemos si fue duplicación real, se revirtió, o se ignoró.</div></td>
+          </tr>
+          <tr>
+            <td><span class="task-id">JU1-I448</span></td>
+            <td><div class="task-title">Verificación biométrica en estado "Pending" – 4 sedes (#8293)</div></td>
+            <td><div class="task-note">Cerrado sin comentario; se cierra el ticket.</div></td>
+            <td><div class="task-note">Las observaciones ya advertían: "cerrado sin respuesta clara para el cliente."</div></td>
+          </tr>
+          <tr>
+            <td><span class="task-id">CA4-T105</span></td>
+            <td><div class="task-title">externalPlayerId not being sent in GameURL – MyBitcoinCasino</div></td>
+            <td><div class="task-note">Estado "Published" sin comentarios.</div></td>
+            <td><div class="task-note">No sabemos qué se publicó, ni si es estable, ni qué impacto tiene.</div></td>
+          </tr>
+          <tr>
+            <td><span class="task-id">CA4-T108</span></td>
+            <td><div class="task-title">Ajustes en visualización de comisiones – líderes y cajeros</div></td>
+            <td><div class="task-note">Estado "Published" sin comentarios.</div></td>
+            <td><div class="task-note">Las observaciones preguntan "¿el punto 2 y 3 fue solucionado?" Sin respuesta.</div></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- SECCIÓN B -->
+  <div class="section-block">
+    <div class="section-label">Sección B</div>
+    <div class="section-heading">Los 47 pendientes reales — Distribución de estado</div>
+    <p class="section-desc">De los 47 tickets que permanecen con Resuelto = FALSE, ninguno cuenta con un feedback técnico completo y accionable para el cliente. Esta es la causa raíz del problema señalado por Guido.</p>
+
+    <div class="stat-grid">
+      <div class="stat-card red">
+        <div class="stat-num">26</div>
+        <div class="stat-label">Sin respuesta ni observaciones — campo vacío</div>
+      </div>
+      <div class="stat-card amber">
+        <div class="stat-num">15</div>
+        <div class="stat-label">Solo con notas de seguimiento, sin respuesta técnica</div>
+      </div>
+      <div class="stat-card blue">
+        <div class="stat-num">6</div>
+        <div class="stat-label">Con respuesta parcial o no accionable</div>
+      </div>
+      <div class="stat-card red">
+        <div class="stat-num">0</div>
+        <div class="stat-label">Con feedback técnico completo y accionable</div>
+      </div>
+    </div>
+
+    <div class="progress-section">
+      <div class="progress-title">Distribución de los 47 tickets pendientes por nivel de información</div>
+      <div class="progress-bar">
+        <div class="progress-seg" style="width:55.3%; background:#C5281C;"></div>
+        <div class="progress-seg" style="width:31.9%; background:#D97706;"></div>
+        <div class="progress-seg" style="width:12.8%; background:#2563EB;"></div>
+      </div>
+      <div class="progress-legend">
+        <div class="legend-item"><div class="legend-dot" style="background:#C5281C;"></div>Sin información (26 · 55%)</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#D97706;"></div>Solo seguimiento (15 · 32%)</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#2563EB;"></div>Respuesta parcial (6 · 13%)</div>
+      </div>
+    </div>
+
+    <!-- Subtabla B1: Sin información -->
+    <div class="task-table-wrap">
+      <div class="table-header">
+        <span class="badge red">Sin ningún comentario</span>
+        <h3>26 tickets completamente vacíos — 0 información disponible</h3>
+        <span class="cnt">55% del pendiente</span>
+      </div>
+      <table class="task-table">
+        <thead>
+          <tr>
+            <th>Task</th>
+            <th>Título</th>
+            <th>Plataforma</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><span class="task-id">TO1-T241</span></td><td><div class="task-title">Melhoria no layout do bilhete de aposta</div></td><td><span class="task-note">TO1</span></td></tr>
+          <tr><td><span class="task-id">AHC0-T1722</span></td><td><div class="task-title">Solicitud eliminación/traducción de rutas – jugadon.bet.ar (#8341)</div></td><td><span class="task-note">AHC0</span></td></tr>
+          <tr><td><span class="task-id">GE2-T949</span></td><td><div class="task-title">Detallar funcionalidad herramientas payment methods / control</div></td><td><span class="task-note">GE2</span></td></tr>
+          <tr><td><span class="task-id">JU1-T1861</span></td><td><div class="task-title">Verificación inconsistencias – Saldo Real vs Saldo Bono (#8354)</div></td><td><span class="task-note">JU1</span></td></tr>
+          <tr><td><span class="task-id">JU1-T1874</span></td><td><div class="task-title">Consulta creación promo diaria con asignación manual de bono (#8413)</div></td><td><span class="task-note">JU1</span></td></tr>
+          <tr><td><span class="task-id">JU1-T1877</span></td><td><div class="task-title">Relevamiento links de soporte – Validación URLs migración Zendesk (#8437)</div></td><td><span class="task-note">JU1</span></td></tr>
+          <tr><td><span class="task-id">GE2-T954</span></td><td><div class="task-title">¿Qué es Fido?</div></td><td><span class="task-note">GE2</span></td></tr>
+          <tr><td><span class="task-id">BJ1-T9</span></td><td><div class="task-title">Configuración Bono Jugable – MUNDIALITO JUGADON – PRAGMATIC (#8457)</div></td><td><span class="task-note">BJ1</span></td></tr>
+          <tr><td><span class="task-id">GE2-T958</span></td><td><div class="task-title">Registro de juegos para pruebas – Activación proveedores SALSA</div></td><td><span class="task-note">GE2</span></td></tr>
+          <tr><td><span class="task-id">LA2-T209</span></td><td><div class="task-title">Configuración de Bono – Reactivación La Rioja (#8502)</div></td><td><span class="task-note">LA2</span></td></tr>
+          <tr><td><span class="task-id">AHC0-T1727</span></td><td><div class="task-title">Validación límite conversión – Bono "Invita Jugadón" (#8520)</div></td><td><span class="task-note">AHC0</span></td></tr>
+          <tr><td><span class="task-id">JU1-T1889</span></td><td><div class="task-title">Verificación acreditación duplicada – rivermaniaco56 – SL (#8528)</div></td><td><span class="task-note">JU1</span></td></tr>
+          <tr><td><span class="task-id">JU1-T1890</span></td><td><div class="task-title">Solicitud ajustes en ficha de usuario – CMS (#8530)</div></td><td><span class="task-note">JU1</span></td></tr>
+          <tr><td><span class="task-id">KA1-T115</span></td><td><div class="task-title">Activar Promoción "Bonus Weekend"</div></td><td><span class="task-note">KA1</span></td></tr>
+          <tr><td><span class="task-id">CJ1-T1119</span></td><td><div class="task-title">Configuración Bono Bienvenida – Vigencia Abril a Julio 2026 (#8540)</div></td><td><span class="task-note">CJ1</span></td></tr>
+          <tr><td><span class="task-id">JU1-T1891</span></td><td><div class="task-title">Ajustes configuración Endorphina – 4 sedes (#8542)</div></td><td><span class="task-note">JU1</span></td></tr>
+          <tr><td><span class="task-id">JU1-T1892</span></td><td><div class="task-title">Modificaciones en Preguntas Frecuentes – 4 plataformas (#8544)</div></td><td><span class="task-note">JU1</span></td></tr>
+          <tr><td><span class="task-id">KA1-T116</span></td><td><div class="task-title">Posible bug crítico – Validación de vulnerabilidad (Tawk.to)</div></td><td><span class="task-note">KA1</span></td></tr>
+          <tr><td><span class="task-id">CJ1-T1120</span></td><td><div class="task-title">Visualización de segundos en fecha/hora de suscripción a promos (#8548)</div></td><td><span class="task-note">CJ1</span></td></tr>
+          <tr><td><span class="task-id">JU1-T1894</span></td><td><div class="task-title">Activar slots proveedor "Endorphina" (#8551)</div></td><td><span class="task-note">JU1</span></td></tr>
+          <tr><td><span class="task-id">LA3-T100</span></td><td><div class="task-title">Cambio de nombres en features de favoritos (ambas plataformas)</div></td><td><span class="task-note">LA3</span></td></tr>
+          <tr><td><span class="task-id">LA3-T101</span></td><td><div class="task-title">Ajuste de prioridad – Saldo vs Voucher (Teams)</div></td><td><span class="task-note">LA3</span></td></tr>
+          <tr><td><span class="task-id">BJ1-T12</span></td><td><div class="task-title">Configuración bono promocional – VIP & INSIGNIA (#8557)</div></td><td><span class="task-note">BJ1</span></td></tr>
+          <tr><td><span class="task-id">JU1-T1895</span></td><td><div class="task-title">Activar slots en Jugadon San Luis y La Rioja (#8558)</div></td><td><span class="task-note">JU1</span></td></tr>
+          <tr><td><span class="task-id">BJ1-T13</span></td><td><div class="task-title">Configuración Cashback VIP e INSIGNIA – Abril 2026 (#8559)</div></td><td><span class="task-note">BJ1</span></td></tr>
+          <tr><td><span class="task-id">BJ1-T14</span></td><td><div class="task-title">Configuración promoción HotWeekend – Abril 2026 (#8560)</div></td><td><span class="task-note">BJ1</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Subtabla B2: Solo seguimiento -->
+    <div class="task-table-wrap">
+      <div class="table-header">
+        <span class="badge amber">Solo seguimiento</span>
+        <h3>15 tickets con observaciones de seguimiento pero sin respuesta técnica</h3>
+        <span class="cnt">32% del pendiente</span>
+      </div>
+      <table class="task-table">
+        <thead>
+          <tr>
+            <th>Task</th>
+            <th>Título</th>
+            <th>Observación actual</th>
+            <th>Qué falta</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="task-id">CJ1-T1080</span></td>
+            <td><div class="task-title">Cambio visual – Validación biométrica 4 plataformas (#7672)</div></td>
+            <td><div class="task-note">ON HOLD, se solicitó info (26/02), feedback 07/03</div></td>
+            <td><div class="task-note">Respuesta técnica del equipo de desarrollo</div></td>
+          </tr>
+          <tr>
+            <td><span class="task-id">JU1-T1774</span></td>
+            <td><div class="task-title">Visualización apuesta mín/máx en tarjetas juegos en vivo (#7891)</div></td>
+            <td><div class="task-note">ON HOLD, última act 13/03. Consultando viabilidad</div></td>
+            <td><div class="task-note">Resolución de viabilidad por parte de tech</div></td>
+          </tr>
+          <tr>
+            <td><span class="task-id">BE5-T232</span></td>
+            <td><div class="task-title">Transferencias de saldo desde perfil de agencia</div></td>
+            <td><div class="task-note">ON HOLD. "No determinan si es posible." Feedback 07/03</div></td>
+            <td><div class="task-note">Definición técnica: viable o descartado</div></td>
+          </tr>
+          <tr>
+            <td><span class="task-id">JU1-T1791</span></td>
+            <td><div class="task-title">Motor de recomendaciones personalizadas – Casino en Vivo (#7968)</div></td>
+            <td><div class="task-note">"Necesitan más tiempo." Última act 13/03</div></td>
+            <td><div class="task-note">ETA o estado de avance del desarrollo</div></td>
+          </tr>
+          <tr>
+            <td><span class="task-id">CJ1-T1094</span></td>
+            <td><div class="task-title">Diagrama de flujo – Registro CABA (LOTBA) (#8060)</div></td>
+            <td><div class="task-note">Comentado 01/03, feedback 07/03. Última act 09/03</div></td>
+            <td><div class="task-note">Estado de resolución o próximos pasos</div></td>
+          </tr>
+          <tr>
+            <td><span class="task-id">LA2-I85</span></td>
+            <td><div class="task-title">Verificación biométrica – La Rioja (#8061)</div></td>
+            <td><div class="task-note">Comentado 28/02, feedback 07/03</div></td>
+            <td><div class="task-note">Respuesta técnica de vuelta al soporte</div></td>
+          </tr>
+          <tr>
+            <td><span class="task-id">CA4-T101</span></td>
+            <td><div class="task-title">Revisión feedback cliente sobre demo / Teams</div></td>
+            <td><div class="task-note">Solo "Link al chat de Teams"</div></td>
+            <td><div class="task-note">Resumen del estado y resolución del issue</div></td>
+          </tr>
+          <tr>
+            <td><span class="task-id">AHC0-T1716</span></td>
+            <td><div class="task-title">Análisis registros biométricos MetaMap – COMPLETED sin alta (#8306)</div></td>
+            <td><div class="task-note">Solo "Seguimiento 19/03"</div></td>
+            <td><div class="task-note">Qué reveló el análisis y qué acción se tomó</div></td>
+          </tr>
+          <tr>
+            <td><span class="task-id">TO1-T236</span></td>
+            <td><div class="task-title">Corrección de ancho en CSS – Corte de layout</div></td>
+            <td><div class="task-note">Seguimiento 07/03, 19/03</div></td>
+            <td><div class="task-note">¿Se corrigió? ¿En qué entorno? ¿Cuándo va a producción?</div></td>
+          </tr>
+          <tr>
+            <td><span class="task-id">JU1-I452</span></td>
+            <td><div class="task-title">Asignación indebida Bono Bienvenida – Afiliados/Agencias (#8329)</div></td>
+            <td><div class="task-note">Vinculado a BS1-T161 (se cambió el link)</div></td>
+            <td><div class="task-note">Estado del task vinculado y resolución final</div></td>
+          </tr>
+          <tr>
+            <td><span class="task-id">LA3-T97</span></td>
+            <td><div class="task-title">Cambio de logo (Teams)</div></td>
+            <td><div class="task-note">Link a chat de Teams con la solicitud</div></td>
+            <td><div class="task-note">Confirmación de que el logo fue agregado</div></td>
+          </tr>
+          <tr>
+            <td><span class="task-id">BJ1-T4</span></td>
+            <td><div class="task-title">Configuración Promo INVITA JUGADON (11/03 + nuevas fechas 18/03)</div></td>
+            <td><div class="task-note">Promo activa para 11/03. Task abierto por nuevas fechas</div></td>
+            <td><div class="task-note">Confirmación de las fechas adicionales implementadas</div></td>
+          </tr>
+          <tr>
+            <td><span class="task-id">CA4-T109</span></td>
+            <td><div class="task-title">Info apuestas deportivas y exportación por periodo</div></td>
+            <td><div class="task-note">Solo "Link al chat"</div></td>
+            <td><div class="task-note">Respuesta a la solicitud de información</div></td>
+          </tr>
+          <tr>
+            <td><span class="task-id">LA3-T99</span></td>
+            <td><div class="task-title">Usuario no recibió bono "Duplica tu primer depósito"</div></td>
+            <td><div class="task-note">"Se actualizaron comentarios en task"</div></td>
+            <td><div class="task-note">Traer el contenido de esos comentarios al archivo</div></td>
+          </tr>
+          <tr>
+            <td><span class="task-id">KA1-I20</span></td>
+            <td><div class="task-title">Juegos Spinomenal no carga</div></td>
+            <td><div class="task-note">"Se trasladó al equipo técnico."</div></td>
+            <td><div class="task-note">Respuesta de vuelta del equipo técnico (Salsa)</div></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Subtabla B3: Respuesta parcial -->
+    <div class="task-table-wrap">
+      <div class="table-header">
+        <span class="badge blue">Respuesta parcial</span>
+        <h3>6 tickets con alguna respuesta, pero no accionable para el cliente</h3>
+        <span class="cnt">13% del pendiente</span>
+      </div>
+      <table class="task-table">
+        <thead>
+          <tr>
+            <th>Task</th>
+            <th>Título</th>
+            <th>Respuesta existente</th>
+            <th>Qué falta</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="task-id">CA4-T98</span></td>
+            <td><div class="task-title">Bug compra de bonus – Error token expirado/inválido (Salsa)</div></td>
+            <td><div class="task-note">"Enlace al ticket de Salsa."</div></td>
+            <td><div class="task-note">Estado del bug y resolución por parte de Salsa</div></td>
+          </tr>
+          <tr>
+            <td><span class="task-id">LA3-I8</span></td>
+            <td><div class="task-title">Error al crear agencia + mensaje de error genérico</div></td>
+            <td><div class="task-note">"Primera parte resuelta, falta el 2do punto."</div></td>
+            <td><div class="task-note">Resolución del segundo punto pendiente</div></td>
+          </tr>
+          <tr>
+            <td><span class="task-id">AHC0-I204</span></td>
+            <td><div class="task-title">Análisis registro incompleto – Usuario Ivana Giordano</div></td>
+            <td><div class="task-note">"SE COMENTA EL TASK 02/03"</div></td>
+            <td><div class="task-note">Conclusión del análisis, no solo que "se comentó"</div></td>
+          </tr>
+          <tr>
+            <td><span class="task-id">CJ1-T1101</span></td>
+            <td><div class="task-title">Descarga masiva logs PDF + JSON – MetaMap 15–19 Feb (#8289)</div></td>
+            <td><div class="task-note">"SE COMENTA EL TAS 02/03"</div></td>
+            <td><div class="task-note">Resultado de la descarga, entrega o estado del request</div></td>
+          </tr>
+          <tr>
+            <td><span class="task-id">KA1-T98</span></td>
+            <td><div class="task-title">No es posible finalizar apuestas en Juegos Virtuales</div></td>
+            <td><div class="task-note">"Se solicitó actualización (26/02)."</div></td>
+            <td><div class="task-note">Respuesta a esa solicitud de actualización</div></td>
+          </tr>
+          <tr>
+            <td><span class="task-id">JU1-T1862</span></td>
+            <td><div class="task-title">Configuración Promo EL DÍA JUGADON (Marzo 2026)</div></td>
+            <td><div class="task-note">"Promo activa en SL, CABA, La Rioja 02/03."</div></td>
+            <td><div class="task-note">Confirmación de cierre completo con todas las fechas</div></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- SECCIÓN C: CALL TO ACTION -->
+  <div class="section-block">
+    <div class="section-label">Sección C</div>
+    <div class="section-heading">Call-to-action para el equipo técnico</div>
+    <p class="section-desc">Conclusiones y acciones concretas para que desde el lado técnico se apoye el proceso de reporte semanal.</p>
+
+    <div class="cta-block">
+      <h3>Sin feedback técnico, soporte no puede responder al cliente</h3>
+      <p>De 56 tickets en el archivo, <strong style="color:#FDE68A">ningún ticket pendiente cuenta con un feedback técnico completo y accionable</strong>. Esto obliga a Guido a abrir cada ticket manualmente cada viernes para construir el reporte de Jugadon — proceso que demanda horas y es completamente evitable con un cambio de hábito simple.</p>
+      <ul>
+        <li>Al <strong>cerrar o publicar un task</strong>, siempre incluir: qué se hizo, cómo se resolvió, y si hay impacto visible para el usuario final.</li>
+        <li>Si un task se cierra <strong>sin solución o por abandono</strong>, explicarlo: "No replicable", "Resuelto por Salsa", "Descartado porque X."</li>
+        <li>Si el task permanece <strong>abierto (ON HOLD, en revisión)</strong>, actualizar el campo de respuesta con el estado real — no solo "se comentó el task."</li>
+        <li>Los <strong>links a chats o correos</strong> como referencia están bien, pero no reemplazan el resumen de la respuesta que el cliente necesita leer.</li>
+        <li>Los <strong>26 tickets completamente en blanco</strong> deben ser priorizados esta semana para registrar al menos su estado actual.</li>
+      </ul>
+      <div class="cta-highlight">
+        <strong>Regla práctica:</strong> Si alguien del equipo de soporte no puede leer la respuesta del task y comunicar al cliente qué pasó y qué se hizo, el task no está bien cerrado. Un párrafo al cerrar = horas ahorradas cada viernes.
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer class="page-footer">
+  SIRPLAY · Desk Centralizado · Generado el 27/03/2026 · Preparado por equipo de soporte
+</footer>
+
+</body>
+</html>
