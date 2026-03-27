@@ -46,9 +46,16 @@
   .page-header {
     background: var(--ink);
     color: var(--white);
-    padding: 48px 64px 40px;
+    padding: 48px 0 40px;
     position: relative;
     overflow: hidden;
+  }
+  .header-inner {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 32px;
+    position: relative;
+    z-index: 1;
   }
   .page-header::before {
     content: '';
@@ -265,7 +272,8 @@
   }
   @media (max-width: 680px) {
     .stat-grid { grid-template-columns: repeat(2, 1fr); }
-    .page-header { padding: 32px 24px 28px; }
+    .page-header { padding: 32px 0 28px; }
+    .header-inner { padding: 0 16px; }
     .header-title { font-size: 26px; }
     .header-meta { flex-wrap: wrap; gap: 20px; }
     .page-body { padding: 32px 16px 60px; }
@@ -276,6 +284,7 @@
 
 <!-- ===== HEADER ===== -->
 <header class="page-header">
+  <div class="header-inner">
   <div class="header-eyebrow">SIRPLAY · Desk Centralizado · Reporte de Pendientes</div>
   <h1 class="header-title">Análisis de tickets pendientes y cierre con feedback</h1>
   <p class="header-sub">Respuesta al planteo de Guido (07:08 hs): estado real de los tasks que figuran como pendientes en el archivo vs. su estado actualizado en el sistema, y cuántos cuentan con feedback útil para el cliente.</p>
@@ -300,6 +309,7 @@
       <span class="meta-label">Con feedback completo</span>
       <span class="meta-value danger">0 de 47</span>
     </div>
+  </div>
   </div>
 </header>
 
